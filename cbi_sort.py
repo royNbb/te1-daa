@@ -2,6 +2,7 @@ import time
 import random
 from memory_profiler import profile
 
+#binary search
 def binary_loc_finder(a_list, start, end, key):
   if start == end:
     if a_list[start] > key:
@@ -9,8 +10,7 @@ def binary_loc_finder(a_list, start, end, key):
       return loc
     else:
       loc = start+1
-      return loc
-    
+      return loc   
   if start>end:
     loc = start
     return loc
@@ -23,6 +23,7 @@ def binary_loc_finder(a_list, start, end, key):
     else:
       return middle
     
+#insert element in the middle of array 
 def place_inserter(a_list, start, end):
   temp = a_list[end]
   for k in range(end, start-1, -1):
@@ -33,11 +34,12 @@ def place_inserter(a_list, start, end):
 
 @profile
 def cbis(a_list):
-  cop = 0
-  pop = 0
+  cop = 0   #first element of the unsorted part
+  pop = 0   #current element
   for i in range(1,len(a_list)):
     cop = i
     key = a_list[cop]
+    #compare cop with element in pop 
     if key>=a_list[pop]:
       place = binary_loc_finder(a_list, pop+1, cop-1, key)
     else:
@@ -49,7 +51,7 @@ def cbis(a_list):
 
 
 if __name__ == "__main__":
-    txt_file_name = "d_20000_reversed.txt"
+    txt_file_name = "d_20000_random.txt"
     dataset = []
 
     # Open and read the text file
@@ -58,9 +60,15 @@ if __name__ == "__main__":
             number = int(line.strip()) 
             dataset.append(number)
   
+    #run sorting and calculate the run time
     start_time = time.time()
     sorted = cbis(dataset)
     end_time = time.time()
 
     elapsed_time_ms = (end_time - start_time) * 1000
     print(f"Elapsed time: {elapsed_time_ms:.2f} milliseconds")
+    
+    #write the sorted array in txt format
+    with open("output_cibs_20000_random.txt", 'w') as txt_file:
+        for value in dataset:
+            txt_file.write(str(value) + '\n')

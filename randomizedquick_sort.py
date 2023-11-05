@@ -5,49 +5,34 @@ import time
 from memory_profiler import profile
 
  
-'''
-The function which implements QuickSort.
-arr :- array to be sorted.
-start :- starting index of the array.
-stop :- ending index of the array.
-'''
-def quicksort(arr, start , stop):
+#quicksort (recursive)
+def quicksort(array, start , stop):
     if(start < stop):
-        pivotindex = partitionrand(arr, start, stop)
+        pivotindex = partitionrand(array, start, stop)
          
-        quicksort(arr , start , pivotindex-1)
-        quicksort(arr, pivotindex + 1, stop)
-    return arr
+        quicksort(array , start , pivotindex-1)
+        quicksort(array, pivotindex + 1, stop)
+    return array
  
-# This function generates random pivot,
-# swaps the first element with the pivot 
-# and calls the partition function.
-def partitionrand(arr , start, stop):
+#generate random partition 
+def partitionrand(array , start, stop):
  
     randpivot = random.randrange(start, stop)
 
-    arr[start], arr[randpivot] = arr[randpivot], arr[start]
-    return partition(arr, start, stop)
+    array[start], array[randpivot] = array[randpivot], array[start]
+    return partition(array, start, stop)
  
-'''
-This function takes the first element as pivot, 
-places the pivot element at the correct position 
-in the sorted array. All the elements are re-arranged 
-according to the pivot, the elements smaller than the
-pivot is places on the left and the elements
-greater than the pivot is placed to the right of pivot.
-'''
-def partition(arr,start,stop):
+#quicksort using the start as pivot
+def partition(array,start,stop):
     pivot = start 
      
     i = start + 1
-     
     for j in range(start + 1, stop + 1): 
-        if arr[j] <= arr[pivot]:
-            arr[i] , arr[j] = arr[j] , arr[i]
+        if array[j] <= array[pivot]:
+            array[i] , array[j] = array[j] , array[i]
             i = i + 1
-    arr[pivot] , arr[i - 1] =\
-            arr[i - 1] , arr[pivot]
+    array[pivot] , array[i - 1] =\
+            array[i - 1] , array[pivot]
     pivot = i - 1
     return (pivot)
  
@@ -56,22 +41,27 @@ def main(dataset):
     sorted = quicksort(dataset, 0, len(dataset)-1)
     return sorted
 
-# Driver Code
+
 if __name__ == "__main__":
 
-    txt_file_name = "d_20000_sorted.txt"
+    txt_file_name = "d_200_reversed.txt"
     dataset = []
 
-    # Open and read the text file
+    #open and read the text file
     with open(txt_file_name, 'r') as txt_file:
         for line in txt_file:
             number = int(line.strip()) 
             dataset.append(number)
 
-
+    #run sorting and calculate the run time
     start_time = time.time()
     sorted = main(dataset)
     end_time = time.time()
 
     elapsed_time_ms = (end_time - start_time) * 1000
     print(f"Elapsed time: {elapsed_time_ms:.2f} milliseconds")
+
+    #write the sorted array in txt format
+    with open("output_quicksort_200_reversed.txt", 'w') as txt_file:
+        for value in dataset:
+            txt_file.write(str(value) + '\n')
